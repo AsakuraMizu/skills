@@ -1,117 +1,68 @@
 ---
 name: write-agents-md
-description: Create or update a concise AGENTS.md for a repository. Use when asked to write, simplify, audit, or refresh AGENTS.md or coding-agent instructions. Produces a small, high-signal file without unverified technology examples, attribution policy, generated markers, or exhaustive file inventories.
+description: Write or review repository-level AGENTS.md and coding-agent instructions, not personal or global rules.
 ---
 
 # Write AGENTS.md
 
-Create or update `AGENTS.md` as compact, durable operating notes for future coding-agent sessions.
+Write repository-level instructions that help an agent make correct decisions in that repository. This skill does not apply to personal or global agent rules.
+An instruction file is not a repository encyclopedia, a second README, or a record of previous sessions.
 
-Every line must pass this test: **Would an agent likely make a wrong guess without this?** If not, omit it.
+## Establish scope and evidence
 
-## Core Principles
+- Start with the user's requested scope and the instructions already available in context. Read the target file before editing; reuse prior research that remains applicable.
+- Inspect code, configuration, CI, or documentation to resolve specific uncertainties about a proposed instruction. Do not inventory the repository merely to populate sections.
+- Distinguish current implementation facts from intended policy. Verify facts against their owning source; preserve explicit user and project requirements even when code does not enforce them. Report material conflicts rather than silently choosing a new policy.
+- Treat global instructions as inherited constraints; this skill covers only repository and in-repository directory scopes. Do not repeat inherited guidance without a local reason, and do not assume every agent tool discovers or combines instruction files the same way.
+- Keep changes within the requested files. Adding nested instruction files, tool-specific mirrors, symlinks, or new reference documents is a separate scope decision, not routine setup.
 
-- Keep the file small: target 20-50 lines; exceed that only for genuinely unusual repositories.
-- Prefer stable facts over detailed inventories that drift.
-- Record what changes agent behavior: exact commands, non-obvious setup, important boundaries, and hard-earned gotchas.
-- Do not include AI attribution, `Co-Authored-By`, commit authorship rules, generated timestamps, managed-section markers, or symlink instructions.
-- Infer technologies and tools only from the target repository; never carry over technologies from prompts, templates, prior examples, or user anecdotes unless repository evidence verifies them.
-- The generated `AGENTS.md` may name the repository's verified technologies and tools when they change how agents should work, such as exact commands, required versions, generated artifacts, migrations, or unusual setup.
-- Do not explain common software practices, generic safety rules, or agent behavior defaults.
-- Do not create nested instruction files unless the user explicitly asks for them.
+## Select content by its effect
 
-## Investigation
+Keep information that changes a likely agent decision, prevents a recurring mistake, or records an explicit working agreement.
+Typical candidates are non-obvious ownership boundaries, project-specific conventions, unusual setup constraints, and change-specific verification requirements.
+They are candidates, not mandatory sections.
 
-Read the highest-signal sources first:
+- State when a rule applies and what the agent should do. Add a short reason when it helps distinguish the rule from a plausible but wrong alternative.
+- Use precise instructions rather than slogans such as "follow best practices" or "keep documentation updated." Avoid turning a narrow incident into an unconditional rule.
+- Preserve the user's intended strength and scope. Do not weaken a required workflow into a suggestion, or promote an observed implementation detail into a permanent requirement.
+- Prefer durable guidance. Omit session summaries, completed work, temporary test results, dependency inventories, and speculative warnings.
+- Do not restate standard language conventions, mechanically enforced formatting rules, obvious directory structure, or ordinary tool usage unless the repository has a meaningful exception.
+- Follow the repository's language and terminology. Examples or upstream templates are not evidence that this project uses their technologies, policies, or workflows.
 
-1. Existing instruction files: `AGENTS.md`, tool-specific instruction files, repo-local agent config.
-2. Human docs: readme, contributing, security, architecture, release, or policy docs.
-3. Executable truth: manifests, task runners, build/test/lint/format/codegen config, CI, hooks.
-4. Representative code only when docs and config do not reveal the system shape.
+## Reference existing knowledge
 
-Trust executable config over prose when they conflict. Ask the user only when an important team convention cannot be inferred from the repository.
+Give a specific repository-relative path and explain when it is relevant when an existing document or configuration already owns the details.
+Inline a critical rule when it must be visible before an agent acts; link to longer procedures, API contracts, or design rationale instead of copying them.
 
-## What To Include
+Do not replace duplicated content with an exhaustive link directory.
+A reference earns its place by answering a likely question or directing a concrete kind of work.
+Keep stable architectural intent distinct from a snapshot of files, symbols, or dependencies.
 
-Use only sections that add value. Prefer this order:
+## Describe workflows, not command catalogs
 
-```markdown
-# AGENTS.md
+Do not create a commands section, command table, or build/test/lint checklist by default.
+If task runners, CI, or development documentation already explain a workflow, point to the relevant entry rather than maintaining another catalog.
 
-## Project
-- One sentence describing what this repository does.
+Include an exact command when its spelling resolves a real ambiguity, when an unusual invocation is easy to get wrong, or when the user explicitly requests it.
+Include the working directory, environment, order, or prerequisites only when they affect correct execution.
+For verification, capture the relationship between a kind of change and the checks it requires; a list of available checks alone does not express that relationship.
 
-## Commands
-| Task | Command |
-|------|---------|
-| ... | `...` |
+Use the smallest verification scope that actually covers the affected contract.
+Retain project-wide or end-to-end requirements when the project needs them; do not mechanically replace them with file-scoped checks.
+Verify command availability and semantics from repository evidence rather than inventing convenient variants.
 
-## Structure
-- `path/`: short, stable responsibility.
+## Edit and validate
 
-## Rules
-- Repo-specific constraint or gotcha.
-```
+Choose headings and prose, lists, or tables to fit the retained content.
+There are no required sections, preferred section order, line quotas, or mandatory table formats.
+Concision means removing unnecessary information, not compressing important reasoning into cryptic fragments.
 
-### Project
+When revising an existing file, preserve useful guidance and explicitly requested policies.
+Remove repetition and stale facts, but do not delete an agreement merely because it is unusual or absent from a template.
+Prefer focused edits unless a rewrite is needed to fix the organization.
+Do not modify product documentation or executable configuration just to make the instruction file look consistent.
 
-- One sentence only.
-- State purpose, not a broad inventory of tools; mention verified technologies elsewhere only when they change agent behavior.
-
-### Commands
-
-- Include exact commands found in executable sources.
-- Prefer focused verification commands when available.
-- Include full-repo checks only when they are the only reliable command or are used by CI.
-- Do not invent single-test or local-development commands.
-- If command order matters, state the order in one bullet.
-
-### Structure
-
-- List only top-level or architecturally important paths.
-- Describe directory responsibility, not every file.
-- Omit paths whose names already say everything.
-- Do not include generated, cache, vendor, build-output, or dependency directories unless agents must avoid or regenerate them.
-
-### Rules
-
-Include only repository-specific rules, such as:
-
-- Config or secret handling that differs from ordinary expectations.
-- Generated files, migrations, schemas, fixtures, or assets that require a special workflow.
-- Expensive, flaky, external-service, or stateful checks.
-- Public interface, persistence, protocol, or deployment boundaries that require extra care.
-- Existing docs that should be treated as source of truth.
-
-## What To Exclude
-
-Remove these even if previous files contain them:
-
-- Welcome text, explanations of what `AGENTS.md` is, or conclusions.
-- Generic advice: write clean code, add tests, follow best practices, do not introduce bugs.
-- Exhaustive file trees or per-file descriptions.
-- Language, runtime, framework, package manager, or tool claims that are not verified in this repository.
-- Duplicated linter, formatter, typechecker, or style config.
-- Contributor, branch, PR, release, or commit rules unless they are explicitly documented in the repository or requested by the user.
-- Agent identity, disclosure, or authorship policy.
-- Temporary observations, speculation, or TODOs.
-
-## Update Existing Files
-
-When `AGENTS.md` exists:
-
-1. Preserve concise, verified, repo-specific guidance.
-2. Delete stale, generic, speculative, or over-detailed content.
-3. Reconcile commands and paths against current executable sources.
-4. Keep user-owned custom sections only if they still meet this skill's signal bar.
-5. Prefer surgical edits over a full rewrite unless the file is mostly noise.
-
-## Verification Before Writing
-
-Before creating or updating the file, check:
-
-- Every command and path exists or is documented in a verified source.
-- No unverified technology claims or example-driven assumptions remain.
-- Structure stops at stable directory responsibilities, not file-level descriptions.
-- The file has no attribution policy, generated markers, timestamps, or symlink instructions.
-- The final file is short enough that future agents will read it instead of skimming it.
+Before delivery, verify changed factual claims and references, and check for contradictions with applicable instructions.
+Run a command only when its result resolves uncertainty about the instructions; a prose edit does not justify running the entire project workflow.
+Review whether the result helps an agent choose the right action without recreating a manual or command inventory.
+Report substantive changes and unresolved policy questions briefly; keep that explanation out of the instruction file.

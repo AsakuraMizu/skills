@@ -11,6 +11,11 @@ The structure and some rules in this skill are informed by the Asterinas Coding 
 
 The original system is organized by reviewer persona and requires guidelines to be concrete, concise, grounded, and relevant. This skill preserves those principles while adapting the material for general Rust implementation, refactoring, and self-review.
 
+Upstream comparison baselines:
+
+- Coding Guidelines: [`d924a9635a66`](https://github.com/asterinas/asterinas/commit/d924a9635a66c7c3bb43e563eaafa2c61d6ee9d5) (2026-08-18).
+- Review skill entrypoint: [`a58c54eb31d0`](https://github.com/asterinas/asterinas/commit/a58c54eb31d02a17b3b994ad2c579198ca61efb7) (2026-08-18).
+
 ## Adaptation
 
 The following ideas are retained as general principles:

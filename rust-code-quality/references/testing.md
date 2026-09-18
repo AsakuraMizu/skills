@@ -8,11 +8,11 @@ Prefer testing behavior through public APIs, user-visible output, or an external
 
 ## `regression-test-for-bug-fix`
 
-Every bug fix should include a regression test that fails before the fix, unless the failure cannot be reproduced reliably. When no stable regression test is possible, record why and provide an alternative verification method. The test should exercise the triggering input, state transition, interleaving, or resource lifetime, not only the repaired happy path.
+Use existing regression coverage when it already detects the bug. Otherwise, add or adapt a minimal test that exercises the triggering input, state transition, interleaving, or resource lifetime and fails before the fix. When the failure cannot be reproduced reliably in a test, explain the limitation and use another repeatable verification method. Do not add a second test for behavior already protected by the same regression coverage.
 
 ## `boundary-and-error-cases`
 
-Consider empty, minimum, maximum, overflow, missing-resource, repeated-call, mid-operation failure, cancellation, and concurrent-interleaving cases. For external input, include invalid format, length, permission, and lifetime cases when relevant. Add contract-relevant boundaries; do not manufacture fragile tests to increase the count.
+Choose boundary and error cases from the contract affected by the change. Exercise supported inputs or state transitions where a plausible defect would change the observable result, such as arithmetic limits, partial failure, or cancellation when relevant. Reuse existing coverage and add only cases that protect a distinct regression risk.
 
 ## `assertions-not-printing`
 

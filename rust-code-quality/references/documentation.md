@@ -1,6 +1,6 @@
 # Documentation
 
-These rules apply to comments and rustdoc in Rust source, and to Markdown maintained by the project. Follow the repository's established documentation structure and formatting conventions first.
+These rules apply to Rust source comments, rustdoc, and crate or Rust API documentation, including Markdown used for those purposes. Follow the repository's established documentation structure and formatting conventions first.
 
 ## Rust comments and rustdoc
 

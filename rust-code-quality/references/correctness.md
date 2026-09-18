@@ -20,7 +20,7 @@ For external input or legitimate runtime failure, return an error or recover as 
 
 ## `reachable-failure-analysis`
 
-For every new `unwrap`, `expect`, index operation, or `remove(...).unwrap()`, construct a concrete input or state that could make it fail. If the failure cannot be proved unreachable, handle it explicitly. Pay particular attention to loops that mutate containers, merge neighboring ranges, remove entries, invalidate caches, or retry work; preserving logical content does not guarantee that a later container entry still exists.
+Review the preconditions of `unwrap`, `expect`, indexing, and removal operations whose validity is affected by the change or is unclear. Trace failures reachable through supported inputs and states, and handle them according to the contract. Rely on established type and caller invariants rather than adding duplicate checks. In container-mutating loops, verify that an entry still exists when later code accesses it.
 
 ## `state-invariants`
 

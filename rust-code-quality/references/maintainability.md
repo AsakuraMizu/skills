@@ -79,3 +79,7 @@ When behavior comes from an external specification, ABI, protocol, or non-trivia
 ### `narrow-visibility`
 
 Start private. Widen to `pub(super)`, `pub(crate)`, or `pub` only when an actual consumer requires it. Wider visibility increases both the compatibility promise and the audit surface.
+
+### `encode-intent-in-vis`
+
+Express an item's intended API boundary in its own visibility rather than relying only on private ancestor modules. If it must remain within a module, subsystem, or crate, use an explicit restricted visibility; changing a parent's visibility or adding a re-export should not accidentally expose it. For fields, consider the containing type's visibility, which makes their effective boundary locally apparent.
